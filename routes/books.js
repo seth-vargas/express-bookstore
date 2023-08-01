@@ -1,5 +1,6 @@
 const express = require("express");
 const Book = require("../models/book");
+const validateJSON = require("../middleware/validation");
 
 const router = new express.Router();
 
@@ -28,7 +29,7 @@ router.get("/:id", async function (req, res, next) {
 
 /** POST /   bookData => {book: newBook}  */
 
-router.post("/", async function (req, res, next) {
+router.post("/", validateJSON, async function (req, res, next) {
   try {
     const book = await Book.create(req.body);
     return res.status(201).json({ book });
@@ -39,7 +40,7 @@ router.post("/", async function (req, res, next) {
 
 /** PUT /[isbn]   bookData => {book: updatedBook}  */
 
-router.put("/:isbn", async function (req, res, next) {
+router.put("/:isbn", validateJSON, async function (req, res, next) {
   try {
     const book = await Book.update(req.params.isbn, req.body);
     return res.json({ book });
